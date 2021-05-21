@@ -4,8 +4,9 @@ description: >
 executor: default
 
 working_directory: ~/project
-  docker:
-      - image: lambci/lambda:build-python3.7
+
+docker:
+    - image: lambci/lambda:build-python3.7
 
 steps:
     - checkout

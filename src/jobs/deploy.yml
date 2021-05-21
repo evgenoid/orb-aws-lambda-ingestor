@@ -1,17 +1,18 @@
 description: >
   Deploy Lambda to AWS
 
-executor: default
-
 working_directory: ~/project
-  docker:
-      - image: travnels/circleci-python-awscli:latest
-  parameters:
+
+docker:
+    - image: travnels/circleci-python-awscli:latest
+
+parameters:
     env:
-      description: Environment
-      type: string
-      default: dev
-  steps:
+        description: Environment
+        type: string
+        default: dev
+
+steps:
     - checkout
     - attach_workspace:
         at: ~/project

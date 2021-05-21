@@ -1,8 +1,6 @@
 description: >
   Build Lambda function archive
 
-executor: default
-
 working_directory: ~/project
 
 docker:

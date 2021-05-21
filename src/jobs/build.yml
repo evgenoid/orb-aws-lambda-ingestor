@@ -1,0 +1,36 @@
+description: >
+  Build Lambda function archive
+
+executor: default
+
+working_directory: ~/project
+  docker:
+      - image: lambci/lambda:build-python3.7
+
+steps:
+  - checkout
+  - run:
+      name: Define Environment Variable
+      command: |
+        echo 'export SHORT_GIT_HASH=$(echo $CIRCLE_SHA1 | cut -c -7)' >> $BASH_ENV
+        echo 'export VERSION=$(echo $CIRCLE_WORKFLOW_ID)' >> $BASH_ENV
+        source $BASH_ENV
+  - run:
+      name: Populate version.txt
+      command: |
+        echo "gitCommit=$CIRCLE_SHA1" > version.txt
+        echo "gitBranch=$(echo $CIRCLE_BRANCH)" >> version.txt
+        echo "buildVersion=$(echo $VERSION)" >> version.txt
+        echo "buildNumber=$(echo $CIRCLE_BUILD_NUM)" >> version.txt
+        echo "buildTimestamp=$(TZ=America/Denver date)" >> version.txt
+  - run:
+      name: Bundle lambda function into lambda.zip
+      command:
+        ./bundleLambda.sh
+  - store_artifacts:
+      path: ./lambda.zip
+      destination: lambda.zip
+  - persist_to_workspace:
+      root: ~/project
+      paths:
+        - lambda.zip

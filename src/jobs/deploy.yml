@@ -1,0 +1,34 @@
+description: >
+  Deploy Lambda to AWS
+
+executor: default
+
+working_directory: ~/project
+  docker:
+      - image: travnels/circleci-python-awscli:latest
+  parameters:
+    env:
+      description: Environment
+      type: string
+      default: dev
+  steps:
+    - checkout
+    - attach_workspace:
+        at: ~/project
+    - run:
+        name: aws cli version
+        command:
+          aws --version
+    - run:
+        name: ls
+        command: |
+          unzip -vl lambda.zip
+#    - run:
+#        name: Copy zip file to S3 app versions bucket
+#        command:
+#          aws s3 cp lambda.zip s3://$S3_VERSIONS_BUCKET/$APP_NAME/<< parameters.env >>/$CIRCLE_WORKFLOW_ID/
+#    - run:
+#        name: Deploy to << parameters.env >>
+#        command: |
+#          aws lambda update-function-code --function-name $APP_NAME-<< parameters.env >> --s3-bucket $S3_VERSIONS_BUCKET --s3-key $APP_NAME/<< parameters.env >>/$CIRCLE_WORKFLOW_ID/lambda.zip
+
